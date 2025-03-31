@@ -2,6 +2,7 @@
 
 ## Estructura de directorios
 
+```
 /Fraud_Detection  
 ├── /Data              — *Almacena los datos del proyecto*  
 │   ├── in             — *Datos sin procesar*  
@@ -20,3 +21,4 @@
 │   └── report.pdf     — *Informe final del proyecto*  
 │  
 └── requirements.txt   — *Lista de dependencias del entorno*  
+```
