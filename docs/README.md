@@ -22,3 +22,5 @@
 │  
 └── requirements.txt   — *Lista de dependencias del entorno*  
 ```
+Descripcion proyecto Fraud_Detection:
+  Este proyecto tiene como objetivo contruir modelos de machine learning que sean capaces de predecir las transacciones fraudulentas con tarjetas de credito. Nos hemos enfrentado ante problemas con los datos proporcionados por lo que hemos tenido que realizar estrategias de preprocesamiento, transformacion PCA, y balancear las clases para obtener un mejor rendimiento de los modelos. 
