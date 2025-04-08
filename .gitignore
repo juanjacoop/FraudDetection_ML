@@ -1,1 +1,11 @@
-data/in/data_dict
+# Archivos de datos
+*.csv
+*.xlsx
+*.xls
+*.json
+*.xml
+*.parquet
+*.feather
+
+# Carpeta donde guardas datasets (por ejemplo)
+data/
