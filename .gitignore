@@ -8,4 +8,6 @@
 *.feather
 
 # Carpeta donde guardas datasets (por ejemplo)
-data/
+.conda/
+docs/apuntes y observaciones/
+data/out/
