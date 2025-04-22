@@ -1,0 +1,62 @@
+Target Value Counts: Class
+0    344
+1    344
+Name: count, dtype: int64
+
+Best params: {'C': 1000, 'gamma': 0.0001, 'kernel': 'rbf'}
+
+Best estimator: SVC(C=1000, gamma=0.0001)
+
+===Dataset de Training ===
+Accuracy Score: 0.9683
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       1.00      0.97      0.98    199012
+           1       0.05      0.93      0.09       344
+
+    accuracy                           0.97    199356
+   macro avg       0.52      0.95      0.54    199356
+weighted avg       1.00      0.97      0.98    199356
+
+Confusion Matrix:
+[[192724   6288]
+ [    23    321]]
+
+===Dataset de Testing ===
+Accuracy Score: 0.9672
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       1.00      0.97      0.98     42648
+           1       0.04      0.88      0.08        74
+
+    accuracy                           0.97     42722
+   macro avg       0.52      0.92      0.53     42722
+weighted avg       1.00      0.97      0.98     42722
+
+Confusion Matrix:
+[[41256  1392]
+ [    9    65]]
+
+=== Dataset de Validacion ===
+Accuracy Score: 0.9690
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       1.00      0.97      0.98     42655
+           1       0.05      0.93      0.09        74
+
+    accuracy                           0.97     42729
+   macro avg       0.52      0.95      0.54     42729
+weighted avg       1.00      0.97      0.98     42729
+
+Confusion Matrix:
+[[41334  1321]
+ [    5    69]]
+
+=== Bondad del Modelo ===
+Train Accuracy: 0.9683
+Test Accuracy: 0.9672
+Validation Accuracy: 0.9690
+No se detecta overfitting significativo
