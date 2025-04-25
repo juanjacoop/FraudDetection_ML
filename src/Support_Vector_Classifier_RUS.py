@@ -1,8 +1,6 @@
 from sklearn.svm import SVC 
 import pandas as pd 
 import numpy as np 
-from imblearn.over_sampling import SMOTE
-from imblearn.combine import SMOTEENN 
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn.metrics import classification_report, confusion_matrix,accuracy_score,f1_score,roc_auc_score
 from sklearn.model_selection import GridSearchCV 
@@ -11,7 +9,7 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import RobustScaler
 import os
 
-log_file = r"docs\classifier_logs\log_svc.txt"
+log_file = r"docs\classifier_logs\log_svc_rus.txt"
 
 # Crear el archivo si no existe
 if not os.path.exists(log_file):
@@ -34,7 +32,6 @@ with open(log_file, "w") as log:
 
     # Declaracion de la variable objetivo
     target = 'Class'
-
     
 #==========================================================================================================================
     # Cargo un 20% de mi dataset de prueba ya que no tengo la capacidad para entrenar un modelo en local
@@ -45,6 +42,7 @@ with open(log_file, "w") as log:
                                random_state=42)
 #========================================================================================================================== 
     
+
     #Separacion de caracteristicas y variable objetivo
     x_train, y_train = train_df.drop(columns=target), train_df[target]
     x_test, y_test = test_df.drop(columns=target), test_df[target]
@@ -52,10 +50,11 @@ with open(log_file, "w") as log:
 
 
     #Instanciación y utlizacion de la tecnica SMOTE 
-    rus = SMOTE(random_state=42)
+    rus = RandomUnderSampler(random_state=42)
     x_train_smt, y_train_smt = rus.fit_resample(x_train, y_train)
-        #x_train_smt, y_train_smt = x_train,y_train
-    print(y_train_smt.value_counts())
+    
+    # x_train_smt, y_train_smt = x_train,y_train
+    # print(y_train_smt.value_counts())
 
     scaler = RobustScaler()
     scaler.fit(x_train)
@@ -70,13 +69,13 @@ with open(log_file, "w") as log:
 
     param_grid = [
     {'C': [100],'kernel': ['linear'], 'class_weight': ['balanced']},
-    # {'kernel': ['poly'],'gamma': [0.001, 0.0001], 'class_weight': ['balanced']},
-    # {'kernel': ['sigmoid'],'gamma': [0.001, 0.0001], 'class_weight': ['balanced']},
-    # {'kernel': ['rbf'],'gamma': [0.001, 0.0001], 'class_weight': ['balanced']}
-    # {'C': [1, 10, 100, 1000], 'kernel': ['linear']},
-    # {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001], 'kernel': ['sigmoid']},
-    # {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001], 'kernel': ['poly']},
-    # {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001], 'kernel': ['rbf']}
+    {'kernel': ['poly'],'gamma': [0.001, 0.0001], 'class_weight': ['balanced']},
+    {'kernel': ['sigmoid'],'gamma': [0.001, 0.0001], 'class_weight': ['balanced']},
+    {'kernel': ['rbf'],'gamma': [0.001, 0.0001], 'class_weight': ['balanced']},
+    {'C': [1, 10, 100, 1000], 'kernel': ['linear']},
+    {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001], 'kernel': ['sigmoid']},
+    {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001], 'kernel': ['poly']},
+    {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001], 'kernel': ['rbf']}
     ]
 
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
@@ -86,8 +85,6 @@ with open(log_file, "w") as log:
     # Entrenamiento del Modelo  
     grid.fit(x_train_smt, y_train_smt) 
 
-
-    #Extraccion de mejores hiperparametros y pruebas de validez del modelo, su seguida exportacion a un registro.
     grid_predictions = grid.predict(x_test) 
     
     best_params = grid.best_params_

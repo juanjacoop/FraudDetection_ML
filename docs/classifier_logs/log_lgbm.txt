@@ -1,0 +1,71 @@
+Target Value Counts: Class
+0    39802
+1       69
+Name: count, dtype: int64
+
+Best params: {'learning_rate': 0.1, 'max_depth': -1, 'min_child_samples': 20, 'n_estimators': 100, 'num_leaves': 31}
+
+Best estimator: LGBMClassifier(objective='binary', random_state=42,
+               scale_pos_weight=576.8405797101449)
+
+===Dataset de Training ===
+AUC Score: 0.9842
+Accuracy Score: 0.9972
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00     39802
+           1       0.38      0.97      0.55        69
+
+    accuracy                           1.00     39871
+   macro avg       0.69      0.98      0.77     39871
+weighted avg       1.00      1.00      1.00     39871
+
+Confusion Matrix:
+[[39694   108]
+ [    2    67]]
+
+===Dataset de Testing ===
+AUC Score: 0.8783
+Accuracy Score: 0.9860
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       1.00      0.99      0.99     42648
+           1       0.09      0.77      0.16        74
+
+    accuracy                           0.99     42722
+   macro avg       0.54      0.88      0.58     42722
+weighted avg       1.00      0.99      0.99     42722
+
+Confusion Matrix:
+[[42068   580]
+ [   17    57]]
+
+=== Dataset de Validacion ===
+AUC Score: 0.9458
+Accuracy Score: 0.9860
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       1.00      0.99      0.99     42655
+           1       0.10      0.91      0.18        74
+
+    accuracy                           0.99     42729
+   macro avg       0.55      0.95      0.59     42729
+weighted avg       1.00      0.99      0.99     42729
+
+Confusion Matrix:
+[[42062   593]
+ [    7    67]]
+
+=== Bondad del Modelo ===
+Train Accuracy: 0.9972
+Test Accuracy: 0.9860
+Validation Accuracy: 0.9860
+=== F1-Scores for Class 1 ===
+Train F1-score: 0.5492
+Validation F1-score: 0.1826
+Test F1-score: 0.1603
+
+Posible overfitting: F1-score drop > 10% comparado con validacion

@@ -1,41 +1,29 @@
-from sklearn.svm import SVC 
-import pandas as pd 
-import numpy as np 
-from imblearn.over_sampling import SMOTE
-from imblearn.combine import SMOTEENN 
+from lightgbm import LGBMClassifier,early_stopping
+import pandas as pd
+import numpy as np
 from imblearn.under_sampling import RandomUnderSampler
-from sklearn.metrics import classification_report, confusion_matrix,accuracy_score,f1_score,roc_auc_score
-from sklearn.model_selection import GridSearchCV 
-from sklearn.model_selection import train_test_split
-from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, f1_score, roc_auc_score,make_scorer
+from sklearn.model_selection import GridSearchCV, train_test_split, StratifiedKFold
 from sklearn.preprocessing import RobustScaler
 import os
 
-log_file = r"docs\classifier_logs\log_svc.txt"
+log_file = r"docs\classifier_logs\log_lgbm.txt"
 
 # Crear el archivo si no existe
 if not os.path.exists(log_file):
     with open(log_file, "w") as f:
-        f.write("=== Registro de Entrenamiento SVC ===\n\n")
+        f.write("=== Registro de Entrenamiento LightGBM ===\n\n")
 
 with open(log_file, "w") as log:
 
-
-    # Directorio base
-    base_dir = os.path.join('data', 'out')
-
-    # Directorio base
-    base_dir = os.path.join('data', 'out')
-
     # Cargar los DataFrames
+    base_dir = os.path.join('data', 'out')
     train_df = pd.read_csv(os.path.join(base_dir, 'train.csv'))
     test_df = pd.read_csv(os.path.join(base_dir, 'test.csv'))
     val_df = pd.read_csv(os.path.join(base_dir, 'val.csv'))
 
-    # Declaracion de la variable objetivo
     target = 'Class'
 
-    
 #==========================================================================================================================
     # Cargo un 20% de mi dataset de prueba ya que no tengo la capacidad para entrenar un modelo en local
     # Esto es solo de prueba para verificar que el codigo esta bien y se puede comentar/borrar al final.
@@ -44,55 +32,65 @@ with open(log_file, "w") as log:
                                stratify=train_df['Class'], 
                                random_state=42)
 #========================================================================================================================== 
+
     
-    #Separacion de caracteristicas y variable objetivo
     x_train, y_train = train_df.drop(columns=target), train_df[target]
     x_test, y_test = test_df.drop(columns=target), test_df[target]
     x_val, y_val = val_df.drop(columns=target), val_df[target]
 
+    # Con random under sampling
+    # rus = RandomUnderSampler(random_state=42)
+    #x_train_smt, y_train_smt = rus.fit_resample(x_train, y_train)
 
-    #Instanciación y utlizacion de la tecnica SMOTE 
-    rus = SMOTE(random_state=42)
-    x_train_smt, y_train_smt = rus.fit_resample(x_train, y_train)
-        #x_train_smt, y_train_smt = x_train,y_train
-    print(y_train_smt.value_counts())
 
+    # Escalado robusto -> Lo aplico en training tambien por SMOTE
     scaler = RobustScaler()
     scaler.fit(x_train)
     x_train = scaler.transform(x_train)
     x_test = scaler.transform(x_test)
     x_val = scaler.transform(x_val)
 
-    # Instanciacion del modelo y sus hiperparametros a probar
-    clf = SVC()
+
+    x_train_smt, y_train_smt  = x_train, y_train
+    print(y_train_smt.value_counts())
 
 
+    # LightGBM Classifier
 
-    param_grid = [
-    {'C': [100],'kernel': ['linear'], 'class_weight': ['balanced']},
-    # {'kernel': ['poly'],'gamma': [0.001, 0.0001], 'class_weight': ['balanced']},
-    # {'kernel': ['sigmoid'],'gamma': [0.001, 0.0001], 'class_weight': ['balanced']},
-    # {'kernel': ['rbf'],'gamma': [0.001, 0.0001], 'class_weight': ['balanced']}
-    # {'C': [1, 10, 100, 1000], 'kernel': ['linear']},
-    # {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001], 'kernel': ['sigmoid']},
-    # {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001], 'kernel': ['poly']},
-    # {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001], 'kernel': ['rbf']}
-    ]
+    scale_pos_weight = len(y_train[y_train == 0]) / len(y_train[y_train == 1])
+    clf = LGBMClassifier(objective='binary',
+                     scale_pos_weight=scale_pos_weight, #scale_pos_weight da mejor resultado porque aplica una penalización más suave.
+                     random_state=42)
 
-    cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+    # clf = LGBMClassifier(objective='binary', class_weight='balanced', random_state=42)
 
-    grid = GridSearchCV(clf, param_grid, cv=cv, scoring='f1', verbose=5, n_jobs=-1)
-
-    # Entrenamiento del Modelo  
-    grid.fit(x_train_smt, y_train_smt) 
-
-
-    #Extraccion de mejores hiperparametros y pruebas de validez del modelo, su seguida exportacion a un registro.
-    grid_predictions = grid.predict(x_test) 
+    # Param grid para GridSearchCV
+    param_grid = {
+        'n_estimators': [100, 200],
+        'learning_rate': [0.01, 0.1],
+        'max_depth': [3, 7,-1],
+        'num_leaves': [10,31, 50],
+        'min_child_samples':[20]
+    }
     
+    cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+    scorer = make_scorer(f1_score, pos_label=1)
+    grid = GridSearchCV(clf, param_grid, cv=cv, scoring=scorer, verbose=5, n_jobs=-1)
+
+
+    fit_params = {
+    "eval_set": [(x_val, y_val)],
+    "eval_metric": "auc",
+    "callbacks": [early_stopping(stopping_rounds=20, verbose=False)]
+    }   
+
+    # Entrenamiento
+    grid.fit(x_train_smt, y_train_smt, **fit_params)
+
+    grid_predictions = grid.predict(x_test)
+
     best_params = grid.best_params_
     best_estimator = grid.best_estimator_
-
 
     log.write(f"Target Value Counts: {y_train_smt.value_counts()}\n\n")
     log.write(f"Best params: {best_params}\n\n")
