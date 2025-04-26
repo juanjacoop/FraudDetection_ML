@@ -40,6 +40,8 @@ Particularidades:
 
   * XGBoost: Usado para buscar mejoras de rendimiento.
 
+ * Regresion Logistica: aporta interpretabilidad y transparencia al proceso
+
 Cada modelo fue evaluado principalmente con métricas de Recall, F1-Score y AUC-ROC debido al alto desbalance.
 ---
 ## Cómo Reproducir el Proyecto
@@ -85,7 +87,7 @@ FRAUDDETECTION_ML/
 |   └── README.md
 ├── src/
 │   ├── EDA_fraud_detection.ipynb [Analisis Exploratorio y Limpieza de Outliers ]
-│   ├── final_models.ipynb [Modelo Xgbost2 ]
+│   ├── final_models.ipynb [Modelo Xgbost2, Regresion Logistica ]
 │   ├── lightgbm_classifier.py [Script de entrenamiento de lightGBM ]
 │   ├── Support_Vector_Classifier_RUS.py [Script de Entrenamiento de SVC con undersampling ]
 │   ├── support_vector_classifier.py [Script de entrenamiento de de SVC sin sampling]
