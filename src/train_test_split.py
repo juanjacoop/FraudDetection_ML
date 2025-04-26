@@ -4,9 +4,18 @@ import os
 from zipfile import ZipFile
 from sklearn.preprocessing import RobustScaler
 
+script_path = os.path.abspath(__file__)
 
-in_filepath = r'data\in\creditcard.csv'
-out_filepath = r'data\out\\'
+project_root = script_path
+while not os.path.isdir(os.path.join(project_root, 'data')):
+    new_root = os.path.dirname(project_root)
+    if new_root == project_root: 
+        raise Exception('El directorio raiz no se ha encontrado.')
+    project_root = new_root
+
+in_filepath = os.path.join(project_root, 'data', 'in', 'creditcard.csv')
+out_filepath = os.path.join(project_root, 'data','out')
+os.makedirs(out_filepath, exist_ok=True)
 
 # Cargar el conjunto de datos
 df_raw = pd.read_csv(in_filepath)
