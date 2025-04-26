@@ -1,62 +1,66 @@
 Target Value Counts: Class
-0    344
-1    344
+0    39802
+1       69
 Name: count, dtype: int64
 
-Best params: {'C': 1000, 'gamma': 0.0001, 'kernel': 'sigmoid'}
+Best params: {'class_weight': 'balanced', 'gamma': 0.001, 'kernel': 'poly'}
 
-Best estimator: SVC(C=1000, gamma=0.0001, kernel='sigmoid')
+Best estimator: SVC(class_weight='balanced', gamma=0.001, kernel='poly', probability=True,
+    random_state=42)
 
 ===Dataset de Training ===
-Accuracy Score: 0.9289
+AUC Score: 0.9273
+Accuracy Score: 0.9992
 Classification Report:
               precision    recall  f1-score   support
 
-           0       1.00      0.93      0.96    199012
-           1       0.02      0.93      0.04       344
+           0       1.00      1.00      1.00     39802
+           1       0.74      0.86      0.79        69
 
-    accuracy                           0.93    199356
-   macro avg       0.51      0.93      0.50    199356
-weighted avg       1.00      0.93      0.96    199356
+    accuracy                           1.00     39871
+   macro avg       0.87      0.93      0.90     39871
+weighted avg       1.00      1.00      1.00     39871
 
 Confusion Matrix:
-[[184862  14150]
- [    23    321]]
+[[39781    21]
+ [   10    59]]
 
 ===Dataset de Testing ===
-Accuracy Score: 0.9979
+AUC Score: 0.5004
+Accuracy Score: 0.0025
 Classification Report:
               precision    recall  f1-score   support
 
-           0       1.00      1.00      1.00     42648
-           1       0.06      0.01      0.02        74
+           0       1.00      0.00      0.00     42648
+           1       0.00      1.00      0.00        74
 
-    accuracy                           1.00     42722
-   macro avg       0.53      0.51      0.51     42722
-weighted avg       1.00      1.00      1.00     42722
+    accuracy                           0.00     42722
+   macro avg       0.50      0.50      0.00     42722
+weighted avg       1.00      0.00      0.00     42722
 
 Confusion Matrix:
-[[42631    17]
- [   73     1]]
+[[   33 42615]
+ [    0    74]]
 
 === Dataset de Validacion ===
-Accuracy Score: 0.9977
+AUC Score: 0.5004
+Accuracy Score: 0.0025
 Classification Report:
               precision    recall  f1-score   support
 
-           0       1.00      1.00      1.00     42655
-           1       0.00      0.00      0.00        74
+           0       1.00      0.00      0.00     42655
+           1       0.00      1.00      0.00        74
 
-    accuracy                           1.00     42729
-   macro avg       0.50      0.50      0.50     42729
-weighted avg       1.00      1.00      1.00     42729
+    accuracy                           0.00     42729
+   macro avg       0.50      0.50      0.00     42729
+weighted avg       1.00      0.00      0.00     42729
 
 Confusion Matrix:
-[[42631    24]
- [   74     0]]
+[[   31 42624]
+ [    0    74]]
 
-=== Bondad del Modelo ===
-Train Accuracy: 0.9289
-Test Accuracy: 0.9979
-Validation Accuracy: 0.9977
-No se detecta overfitting significativo
+=== F1-Scores for Class 1 ===
+Train F1-score: 0.7919
+Validation F1-score: 0.0035
+Test F1-score: 0.0035
+

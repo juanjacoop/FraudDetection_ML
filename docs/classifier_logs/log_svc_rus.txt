@@ -1,49 +1,49 @@
 Target Value Counts: Class
-0    69
-1    69
+0    344
+1    344
 Name: count, dtype: int64
 
-Best params: {'C': 1000, 'gamma': 0.0001, 'kernel': 'sigmoid'}
+Best params: {'C': 1, 'kernel': 'linear'}
 
-Best estimator: SVC(C=1000, gamma=0.0001, kernel='sigmoid')
+Best estimator: SVC(C=1, kernel='linear', probability=True, random_state=42)
 
 ===Dataset de Training ===
-AUC Score: 0.9686
-Accuracy Score: 0.9517
+AUC Score: 0.9505
+Accuracy Score: 0.9619
 Classification Report:
               precision    recall  f1-score   support
 
-           0       1.00      0.95      0.98     39802
-           1       0.03      0.99      0.07        69
+           0       1.00      0.96      0.98    199012
+           1       0.04      0.94      0.08       344
 
-    accuracy                           0.95     39871
-   macro avg       0.52      0.97      0.52     39871
-weighted avg       1.00      0.95      0.97     39871
+    accuracy                           0.96    199356
+   macro avg       0.52      0.95      0.53    199356
+weighted avg       1.00      0.96      0.98    199356
 
 Confusion Matrix:
-[[37877  1925]
- [    1    68]]
+[[191446   7566]
+ [    21    323]]
 
 ===Dataset de Testing ===
-AUC Score: 0.5065
-Accuracy Score: 0.9978
+AUC Score: 0.5064
+Accuracy Score: 0.9976
 Classification Report:
               precision    recall  f1-score   support
 
            0       1.00      1.00      1.00     42648
-           1       0.05      0.01      0.02        74
+           1       0.03      0.01      0.02        74
 
     accuracy                           1.00     42722
    macro avg       0.52      0.51      0.51     42722
 weighted avg       1.00      1.00      1.00     42722
 
 Confusion Matrix:
-[[42627    21]
+[[42619    29]
  [   73     1]]
 
 === Dataset de Validacion ===
-AUC Score: 0.4997
-Accuracy Score: 0.9976
+AUC Score: 0.4996
+Accuracy Score: 0.9974
 Classification Report:
               precision    recall  f1-score   support
 
@@ -55,16 +55,11 @@ Classification Report:
 weighted avg       1.00      1.00      1.00     42729
 
 Confusion Matrix:
-[[42628    27]
+[[42619    36]
  [   74     0]]
 
-=== Bondad del Modelo ===
-Train Accuracy: 0.9517
-Test Accuracy: 0.9978
-Validation Accuracy: 0.9976
 === F1-Scores for Class 1 ===
-Train F1-score: 0.0660
+Train F1-score: 0.0785
 Validation F1-score: 0.0000
-Test F1-score: 0.0208
+Test F1-score: 0.0192
 
-No overffiting en el F1-score

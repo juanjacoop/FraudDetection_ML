@@ -5,6 +5,7 @@ from imblearn.under_sampling import RandomUnderSampler
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, f1_score, roc_auc_score,make_scorer
 from sklearn.model_selection import GridSearchCV, train_test_split, StratifiedKFold
 from sklearn.preprocessing import RobustScaler
+from graficos import *
 import os
 
 log_file = r"docs\classifier_logs\log_lgbm.txt"
@@ -46,9 +47,11 @@ with open(log_file, "w") as log:
     # Escalado robusto -> Lo aplico en training tambien por SMOTE
     scaler = RobustScaler()
     scaler.fit(x_train)
+    column_names = x_train.columns.tolist()
     x_train = scaler.transform(x_train)
     x_test = scaler.transform(x_test)
     x_val = scaler.transform(x_val)
+
 
 
     x_train_smt, y_train_smt  = x_train, y_train
@@ -133,24 +136,49 @@ with open(log_file, "w") as log:
     log.write(f"Classification Report:\n{val_report}\n")
     log.write(f"Confusion Matrix:\n{val_cm}\n\n")
 
-    log.write("=== Bondad del Modelo ===\n")
-    log.write(f"Train Accuracy: {train_accuracy:.4f}\n")
-    log.write(f"Test Accuracy: {test_accuracy:.4f}\n")
-    log.write(f"Validation Accuracy: {val_accuracy:.4f}\n")
-
     train_f1 = f1_score(y_train, train_preds, pos_label=1, zero_division=0)
     val_f1 = f1_score(y_val, val_preds, pos_label=1, zero_division=0)
     test_f1 = f1_score(y_test, test_preds, pos_label=1, zero_division=0)
-
-
 
     log.write("=== F1-Scores for Class 1 ===\n")
     log.write(f"Train F1-score: {train_f1:.4f}\n")
     log.write(f"Validation F1-score: {val_f1:.4f}\n")
     log.write(f"Test F1-score: {test_f1:.4f}\n\n")
 
-    # Overfitting detection based on F1-score drops
-    if (train_f1 - val_f1 > 0.1) or (train_f1 - test_f1 > 0.1):
-        log.write("Posible overfitting: F1-score drop > 10% comparado con validacion\n")
-    else:
-        log.write("No overffiting en el F1-score\n")
+
+     # Guarda los graficos 
+
+    # === Gráficos para Training ===
+    plot_all_metrics(
+        y_true=y_train,
+        y_pred=train_preds,
+        model=grid.best_estimator_,
+        feature_names=column_names,
+        x_features=x_train,
+        dataset_name='Train',
+        model_name='LIGHTGBM sin sampling'
+    )
+
+    # === Gráficos para Testing ===
+    plot_all_metrics(
+        y_true=y_test,
+        y_pred=test_preds,
+        model=grid.best_estimator_,
+        feature_names=column_names,
+        x_features=x_test,
+        dataset_name='Test',
+        model_name='LIGHTGBM sin sampling'
+    )
+
+    # === Gráficos para Validación ===
+    plot_all_metrics(
+        y_true=y_val,
+        y_pred=val_preds,
+        model=grid.best_estimator_,
+        feature_names=column_names,
+        x_features=x_val,
+        dataset_name='Validacion',
+        model_name='LIGHTGBM sin sampling'
+)
+
+

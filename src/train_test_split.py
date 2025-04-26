@@ -39,9 +39,9 @@ features_scaled_t = pd.DataFrame(scaler.fit_transform(features_train), columns=f
 train_df_scaled = pd.concat([features_scaled_t, train_df[target]], axis=1)
 
 
-features_v = val_df.drop(columns='Class')
-features_scaled_v = pd.DataFrame(scaler.fit_transform(features_v), columns=features_v.columns)
-val_df_scaled = pd.concat([features_scaled_v, val_df[target]], axis=1)
+# features_v = val_df.drop(columns='Class')
+# features_scaled_v = pd.DataFrame(scaler.fit_transform(features_v), columns=features_v.columns)
+# val_df_scaled = pd.concat([features_scaled_v, val_df[target]], axis=1)
 
 # Guardar como CSV
 train_df_scaled.to_csv(os.path.join(out_filepath, 'train.csv'), index=False)

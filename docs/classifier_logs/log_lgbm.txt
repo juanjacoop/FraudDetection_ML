@@ -59,13 +59,8 @@ Confusion Matrix:
 [[42062   593]
  [    7    67]]
 
-=== Bondad del Modelo ===
-Train Accuracy: 0.9972
-Test Accuracy: 0.9860
-Validation Accuracy: 0.9860
 === F1-Scores for Class 1 ===
 Train F1-score: 0.5492
 Validation F1-score: 0.1826
 Test F1-score: 0.1603
 
-Posible overfitting: F1-score drop > 10% comparado con validacion
